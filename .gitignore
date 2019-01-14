@@ -1,3 +1,4 @@
+# https://github.com/github/gitignore 忽略规则详细配置
 # Eclipse
 .classpath
 .project
@@ -24,9 +25,16 @@ buildNumber.properties
  
 # java
 *.class
+# Log file
+*.log
+# Package Files #
+*.jar
 *.war
 *.ear
- 
+*.zip
+*.tar.gz
+*.rar
+
 # jrebel
 rebel.xml
  
