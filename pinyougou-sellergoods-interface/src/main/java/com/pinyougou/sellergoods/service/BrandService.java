@@ -46,10 +46,8 @@ public interface BrandService {
 	 * 修改
 	 */
 	public void update(TbBrand brand);
-	/**
-	 * 根据id删除
-	 * @param ids
-	 */
+	
+	//根据id删除
 	public void delete(Long[] ids);
 	/**
 	 * 返回分页列表(条件查询)
