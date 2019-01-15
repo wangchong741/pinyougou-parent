@@ -2,7 +2,7 @@
 # Eclipse
 .classpath
 .project
-.settings/
+.settings
  
 # Intellij
 .idea/
