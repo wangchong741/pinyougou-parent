@@ -10,10 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.solr.core.SolrTemplate;
 import org.springframework.data.solr.core.query.Criteria;
+import org.springframework.data.solr.core.query.FilterQuery;
 import org.springframework.data.solr.core.query.GroupOptions;
 import org.springframework.data.solr.core.query.HighlightOptions;
 import org.springframework.data.solr.core.query.HighlightQuery;
 import org.springframework.data.solr.core.query.Query;
+import org.springframework.data.solr.core.query.SimpleFilterQuery;
 import org.springframework.data.solr.core.query.SimpleHighlightQuery;
 import org.springframework.data.solr.core.query.SimpleQuery;
 import org.springframework.data.solr.core.query.result.GroupEntry;
@@ -29,8 +31,8 @@ import com.pinyougou.pojo.TbContentCategory;
 import com.pinyougou.pojo.TbItem;
 import com.pinyougou.search.service.ItemSearchService;
 
-// timeout在applicationcontent-service已配置  此处可不配
-@Service(timeout = 5000)
+//@Service(timeout = 5000)在applicationcontent-service已配置  此处可不配
+@Service
 public class ItemSearchServiceImpl implements ItemSearchService {
 
 	@Autowired
@@ -62,8 +64,13 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 		map.put("categoryList", categoryList);
 		
 		//3.查询品牌和规格列表
-		if(categoryList.size()>0){
+		String category=(String)searchMap.get("category");
+		if(!"".equals(category)) {//如果有分类名称
 			map.putAll(searchBrandAndSpecList(categoryList.get(0)));
+		}else {//如果没有分类名称，按照第一个查询
+			if(categoryList.size()>0){
+				map.putAll(searchBrandAndSpecList(categoryList.get(0)));
+			}
 		}
 		
 	
@@ -74,16 +81,49 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 	//查询列表
 	private Map searchList(Map searchMap){
 		
+		//高亮选项初始化
 		HighlightQuery query = new SimpleHighlightQuery();
-		
 		HighlightOptions highlightOptions=new HighlightOptions().addField("item_title");//设置高亮的域
 		highlightOptions.setSimplePrefix("<em style='color:red'>");//高亮前缀
 		highlightOptions.setSimplePostfix("</em>");//高亮后缀
 		query.setHighlightOptions(highlightOptions);
 		
-		//关键字查询
+		//1.1关键字查询
 		Criteria criteria=new Criteria("item_keywords").is(searchMap.get("keywords"));
 		query.addCriteria(criteria);
+		
+		//1.2按商品分类过滤
+		if (!"".equals(searchMap.get("category"))) {//如果用户选择了筛选
+			FilterQuery filterQuery=new SimpleFilterQuery();
+			Criteria filterCriteria=new Criteria("item_category").is(searchMap.get("category"));
+			filterQuery.addCriteria(filterCriteria);
+			query.addFilterQuery(filterQuery);
+		}
+		
+		//1.3按品牌过滤
+		if (!"".equals(searchMap.get("brand"))) {//如果用户选择了筛选
+			FilterQuery filterQuery=new SimpleFilterQuery();
+			Criteria filterCriteria=new Criteria("item_brand").is(searchMap.get("brand"));
+			filterQuery.addCriteria(filterCriteria);
+			query.addFilterQuery(filterQuery);
+		}
+		
+		//1.4过滤规格    因为动态域*传入中文变成下划线此功能暂时不好用
+		if(searchMap.get("spec")!=null){
+			Map<String,String> specMap= (Map) searchMap.get("spec");
+			for(String key:specMap.keySet() ){
+				FilterQuery filterQuery=new SimpleFilterQuery();
+				Criteria filterCriteria=new Criteria("item_spec_"+key).is( specMap.get(key) );
+				filterQuery.addCriteria(filterCriteria);
+				query.addFilterQuery(filterQuery);				
+			}			
+		}
+		
+		
+		
+		
+		
+		
 		//返回高亮页对象
 		HighlightPage<TbItem> page=solrTemplate.queryForHighlightPage(query, TbItem.class);
 		
