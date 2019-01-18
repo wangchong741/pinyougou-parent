@@ -119,7 +119,17 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 			}			
 		}
 		
-		
+		//1.6 分页查询		
+		Integer pageNo= (Integer) searchMap.get("pageNo");//获取页码
+		if(pageNo==null){
+			pageNo=1;//默认第一页
+		}
+		Integer pageSize=(Integer) searchMap.get("pageSize");//每页记录数 
+		if(pageSize==null){
+			pageSize=20;//默认20
+		}
+		query.setOffset((pageNo-1)*pageSize);//起始索引
+		query.setRows(pageSize);//设置每页记录数
 		
 		
 		
@@ -142,6 +152,8 @@ public class ItemSearchServiceImpl implements ItemSearchService {
 		}
 		Map<String,Object> map=new HashMap<>();
 		map.put("rows",page.getContent());
+		map.put("totalPages", page.getTotalPages());//返回总页数给前端
+		map.put("total", page.getTotalElements());//返回总记录数给前端
 		return map;
 	}
 	
