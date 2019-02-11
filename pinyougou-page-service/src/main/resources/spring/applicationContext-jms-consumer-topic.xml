@@ -17,7 +17,7 @@
 	    <property name="targetConnectionFactory" ref="targetConnectionFactory"/>  
 	</bean>  
 	
-    <!--这个是队列目的地，发布订阅  文本信息-->  
+    <!--这个是队列目的地，生成页面-->  
 	<bean id="topicGenPageDestination" class="org.apache.activemq.command.ActiveMQTopic">  
 	    <constructor-arg value="pinyougou_topic_genPage"/>  
 	</bean>    
@@ -27,6 +27,18 @@
 		<property name="connectionFactory" ref="connectionFactory" />
 		<property name="destination" ref="topicGenPageDestination" />
 		<property name="messageListener" ref="genPageListener" />
+	</bean>
+	
+	<!--这个是队列目的地，删除页面-->  
+	<bean id="topicDelPageDestination" class="org.apache.activemq.command.ActiveMQTopic">  
+	    <constructor-arg value="pinyougou_topic_DelPage"/>  
+	</bean>    
+	
+	<!-- 消息监听容器 -->
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="topicDelPageDestination" />
+		<property name="messageListener" ref="delPageListener" />
 	</bean>
 	
 </beans>

@@ -49,6 +49,9 @@ public class GoodsController {
 
 	@Autowired
 	private Destination topicGenPageDestination;//用于生产商品详情页的消息（发布订阅）
+	
+	@Autowired
+	private Destination topicDelPageDestination;//用于删除静态网页的消息
 
 	/**
 	 * 返回全部列表
@@ -118,6 +121,14 @@ public class GoodsController {
 				}
 			});
 
+			//发送删除页面的消息
+			jmsTemplate.send(topicDelPageDestination, new MessageCreator() {		
+				@Override
+				public Message createMessage(Session session) throws JMSException {	
+					return session.createObjectMessage(ids);
+				}
+			});	
+			
 			return new Result(true, "删除成功");
 		} catch (Exception e) {
 			e.printStackTrace();
