@@ -8,13 +8,7 @@
         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <dubbo:protocol name="dubbo" port="20885"></dubbo:protocol>
-    
-	<dubbo:application name="pinyougou-page-service"/>  
-    <dubbo:registry address="zookeeper://118.24.87.201:2181"/>
-    <!-- 需要设置一个超时时间，否则第一次调用可能报错 -->
-    <dubbo:provider timeout="12000"> </dubbo:provider>
-    <dubbo:annotation package="com.pinyougou.page.service.impl"  />  
+    <context:component-scan base-package="com.pinyougou.page.service.impl"/>
     
     <bean id="freemarkerConfig"	class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
