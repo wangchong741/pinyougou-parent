@@ -45,15 +45,30 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void createSmsCode(String phone) {
 		// 1.生成6位随机数验证码
-		String smsCode = (long) (Math.random() * 1000000) + "";
-		System.out.println("验证码：" + smsCode);
+		String smscode = (long) (Math.random() * 1000000) + "";
+		System.out.println("验证码：" + smscode);
 
 		// 2,将验证码存入缓存
-		redisTemplate.boundHashOps("smsCode").put(phone, smsCode);
+		redisTemplate.boundHashOps("smscode").put(phone, smscode);
 		
 		//3将短信内容发送到activeMQ
 		
 
+	}
+
+	/**
+	 * 校验验证码
+	 */
+	@Override
+	public boolean checkSmsCode(String phone, String code) {
+		String systemCode=(String) redisTemplate.boundHashOps("smscode").get(phone);
+		if(systemCode==null){
+			return false;
+		}
+		if (!systemCode.equals(code)) {
+			return false;
+		}
+		return true;
 	}
 
 }

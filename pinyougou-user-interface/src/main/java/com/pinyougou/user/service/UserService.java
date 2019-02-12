@@ -22,5 +22,12 @@ public interface UserService {
 	 */
 	public void createSmsCode(String phone);
 	
+	/**
+	 * 校验验证码
+	 * @param phone
+	 * @param code
+	 * @return
+	 */
+	public boolean  checkSmsCode(String phone,String code);
 	
 }
