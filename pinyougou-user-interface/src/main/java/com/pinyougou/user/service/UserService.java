@@ -16,7 +16,11 @@ public interface UserService {
 	 */
 	public void add(TbUser user);
 	
-	
+	/**
+	 * 生成短信验证码
+	 * @param phone
+	 */
+	public void createSmsCode(String phone);
 	
 	
 }
