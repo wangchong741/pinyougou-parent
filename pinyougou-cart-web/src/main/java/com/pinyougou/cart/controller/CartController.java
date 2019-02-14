@@ -49,7 +49,6 @@ public class CartController {
 			List<Cart> cartList = findCartList();// 从cookie中获取购物车列表
 			cartList = cartService.addGoodsToCartList(cartList, itemId, num);// 调用服务方法操作购物车
 			if (username.equals("anonymousUser")) {// 如果未登录
-				
 				util.CookieUtil.setCookie(request, response, "cartList", JSON.toJSONString(cartList), 3600 * 24,
 						"UTF-8");// 将新的购物车存入cookie
 				System.out.println("向cookie存入数据");
