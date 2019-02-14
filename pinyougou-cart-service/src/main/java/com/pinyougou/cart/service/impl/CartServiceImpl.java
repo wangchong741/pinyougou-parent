@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.cart.service.CartService;
@@ -122,5 +123,29 @@ public class CartServiceImpl implements CartService {
 			}			
 		}
 		return null;	
+	}
+
+	@Autowired
+	private RedisTemplate redisTemplate;
+	/**
+	 * 从redis中查询购物车
+	 */
+	@Override
+	public List<Cart> findCartListFromRedis(String username) {
+		System.out.println("从redis中提取购物车数据....."+username);
+		List<Cart> cartList = (List<Cart>)redisTemplate.boundHashOps("cartList").get("username");
+		if(cartList==null){
+			cartList=new ArrayList();
+		}
+		return cartList;
+	}
+	
+	/**
+	 * 从redis中查询购物车
+	 */
+	@Override
+	public void saveCartListToRedis(String username, List<Cart> cartList) {
+		System.out.println("向redis存入购物车数据....."+username);
+		redisTemplate.boundHashOps("cartList").put(username, cartList);
 	}
 }
