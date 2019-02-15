@@ -132,8 +132,7 @@ public class CartServiceImpl implements CartService {
 	 */
 	@Override
 	public List<Cart> findCartListFromRedis(String username) {
-		System.out.println("从redis中提取购物车数据....."+username);
-		List<Cart> cartList = (List<Cart>)redisTemplate.boundHashOps("cartList").get("username");
+		List<Cart> cartList = (List<Cart>)redisTemplate.boundHashOps("cartList").get(username);
 		if(cartList==null){
 			cartList=new ArrayList();
 		}
@@ -141,11 +140,24 @@ public class CartServiceImpl implements CartService {
 	}
 	
 	/**
-	 * 从redis中查询购物车
+	 * 将购物车保存到redis
 	 */
 	@Override
 	public void saveCartListToRedis(String username, List<Cart> cartList) {
-		System.out.println("向redis存入购物车数据....."+username);
 		redisTemplate.boundHashOps("cartList").put(username, cartList);
 	}
+
+	/**
+	 * 合并购物车
+	 */
+	@Override
+	public List<Cart> mergeCartList(List<Cart> cartList1, List<Cart> cartList2) {
+		for(Cart cart: cartList2){
+			for(TbOrderItem orderItem:cart.getOrderItemList()){
+				cartList1= addGoodsToCartList(cartList1,orderItem.getItemId(),orderItem.getNum());		
+			}			
+		}		
+		return cartList1;
+	}
+	
 }
