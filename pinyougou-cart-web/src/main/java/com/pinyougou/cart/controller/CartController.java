@@ -42,6 +42,11 @@ public class CartController {
 	 */
 	@RequestMapping("/addGoodsToCartList")
 	public Result addGoodsToCartList(Long itemId, Integer num) {
+		
+		//接收跨域请求http://localhost:9105 接受哪个地址访问 若不考虑安全可以让所有的访问用*
+		response.setHeader("Access-Control-Allow-Origin", "http://localhost:9105");
+		response.setHeader("Access-Control-Allow-Credentials", "true");//需要操作cookie时需要加这一行，上面地址也必须是特定的地址。
+		
 		// 获取当前登录人账号
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		System.out.println("当前登录人：" + username);
