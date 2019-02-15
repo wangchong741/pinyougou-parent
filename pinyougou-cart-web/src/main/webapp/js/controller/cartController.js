@@ -56,6 +56,12 @@ app.controller('cartController',function($scope,cartService){
 	}
 	
 	
+	//1、在线支付，2、货到付款
+	$scope.order={paymentType:'1'};	
+	//选择支付方式
+	$scope.selectPayType=function(type){
+		$scope.order.paymentType= type;
+	}
 	
 	
 	
