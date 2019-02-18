@@ -75,6 +75,14 @@ public class WeixinPayServiceImpl implements WeiXinPayService {
 		}
 		return map;
 	}
+
+
+	@Override
+	public Map closePay(String out_trade_no) {
+		Map<String, String> map = new HashMap<>();
+		map.put("111", "111");
+		return map;
+	}
 		
 	
 }

@@ -24,4 +24,11 @@ public interface WeiXinPayService {
 	 */
 	public Map queryPayStatus(String out_trade_no);
 	
+	/**
+	 * 关闭支付订单
+	 * @param out_trade_no
+	 * @return
+	 */
+	public Map closePay(String out_trade_no);
+	
 }

@@ -75,14 +75,14 @@ public class PayController {
 				result=new Result(false, "二维码超时");
 				
 				// 关闭支付
-//				Map<String,String> payResult = weixinPayService.closePay(out_trade_no);
-//				if(payResult!=null &&  "FAIL".equals( payResult.get("return_code"))){
-//					if("ORDERPAID".equals(payResult.get("err_code"))){
-//						result=new Result(true, "支付成功");				
-//						//保存订单
-//						seckillOrderService.saveOrderFromRedisToDb(username, Long.valueOf(out_trade_no) ,map.get("transaction_id"));
-//					}					
-//				}
+				Map<String,String> payResult = weixinPayService.closePay(out_trade_no);
+				if(payResult!=null &&  "FAIL".equals( payResult.get("return_code"))){
+					if("ORDERPAID".equals(payResult.get("err_code"))){
+						result=new Result(true, "支付成功");				
+						//保存订单
+						seckillOrderService.saveOrderFromRedisToDb(username, Long.valueOf(out_trade_no) ,map.get("transaction_id"));
+					}					
+				}
 				
 				//删除订单
 				if(result.isSuccess()==false){
