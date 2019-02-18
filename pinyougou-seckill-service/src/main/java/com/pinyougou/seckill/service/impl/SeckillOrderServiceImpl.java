@@ -1,6 +1,7 @@
 package com.pinyougou.seckill.service.impl;
 import java.util.Date;
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -127,6 +128,9 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
 	@Autowired
 	private TbSeckillGoodsMapper seckillGoodsMapper;
 	
+	@Autowired
+	private IdWorker idWorker;
+	
 	
 
 	@Override
@@ -152,7 +156,7 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
 		
 		//3.存储秒杀订单 (不向数据库存 ,只向缓存中存储 )
 		TbSeckillOrder seckillOrder=new TbSeckillOrder();
-//		seckillOrder.setId(idWorker.nextId());
+		seckillOrder.setId(idWorker.nextId());
 		seckillOrder.setSeckillId(seckillId);
 		seckillOrder.setMoney(seckillGoods.getCostPrice());
 		seckillOrder.setUserId(userId);

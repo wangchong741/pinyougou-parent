@@ -2,7 +2,6 @@ package com.pinyougou.seckill.service.impl;
 import java.util.Date;
 import java.util.List;
 
-import org.aspectj.internal.lang.annotation.ajcDeclareAnnotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
