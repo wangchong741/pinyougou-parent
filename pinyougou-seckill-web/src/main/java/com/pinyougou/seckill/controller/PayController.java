@@ -48,6 +48,12 @@ public class PayController {
 		Result result=null;
 		int x=0;
 		while(true){
+			try {
+				Thread.sleep(8000);//8秒后自动支付成功
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			Map<String,String> map = weixinPayService.queryPayStatus(out_trade_no);//调用查询
 			if(map==null){
@@ -61,12 +67,7 @@ public class PayController {
 				break;
 			}
 			
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			
 			x++;
 			if(x>=100){	

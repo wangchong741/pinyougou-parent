@@ -17,7 +17,7 @@ app.controller('payController' ,function($scope ,$location,payService){
 						level:'H'
 			     });
 				 
-//				 queryPayStatus();//调用查询
+				 queryPayStatus();//调用查询
 				
 			}	
 		);	
@@ -31,7 +31,7 @@ app.controller('payController' ,function($scope ,$location,payService){
 					location.href="paysuccess.html#?money="+$scope.money;
 				}else{
 					if(response.message=='二维码超时'){
-						$scope.createNative();//重新生成二维码
+						alert("cahoshi");
 					}else{
 						location.href="payfail.html";
 					}
