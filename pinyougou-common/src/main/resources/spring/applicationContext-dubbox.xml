@@ -8,13 +8,7 @@
         http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <dubbo:protocol name="dubbo" port="20881"></dubbo:protocol>
+    <context:property-placeholder location="classpath*:properties/*.properties" />
+    <dubbo:registry protocol="zookeeper"  address="${address}"/>
     
-	<dubbo:application name="pinyougou-sellergoods-service"/>  
-    <!-- 需要设置一个超时时间，否则第一次调用可能报错 -->
-    <dubbo:provider timeout="12000"> </dubbo:provider>
-    <dubbo:annotation package="com.pinyougou.sellergoods.service.impl"  />  
-   
-   
-   
 </beans>
